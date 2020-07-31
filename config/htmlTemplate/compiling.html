@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compiling</title>
+  <style>
+    body {
+      padding: 20px;
+      margin: 0;
+    }
+    .info-line {
+      padding-bottom: 10px;
+    }
+    #notify {
+      padding: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 4px;
+      color: #fff;
+      background: rgb(38, 39, 41);
+    }
+  </style>
+</head>
+<body>
+  <div id="notify">
+    <div class="info-line">Page: <span id="page-name"></span></div>
+    <div class="info-line">Compiling<span id="ellipsis"></span></div>
+  </div>
+  <script>
+    (function(){
+      var text = "...", count = 0;
+      var ellipsis = document.getElementById("ellipsis");
+      var pageName = document.getElementById("page-name");
+      pageName.innerText = location.pathname.split("/")[1];
+      setInterval(() => {
+        ellipsis.innerText = text.slice(0, count % 3 + 1);
+        count++;
+      }, 1000);
+    })()
+  </script>
+  <script src="/wsClient.js"></script>
+</body>
+
+</html>

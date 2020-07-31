@@ -1,0 +1,17 @@
+{
+  "name": "react-multi-page-app",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "css-loader": "^4.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "memory-fs": "^0.5.0",
+    "mime": "^2.4.6",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.0",
+    "ws": "^7.3.1"
+  },
+  "dependencies": {},
+  "scripts": {}
+}
