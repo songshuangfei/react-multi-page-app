@@ -14,18 +14,12 @@ cleanDir(fs, paths.outputPath);
 const webpackConfig = configFactory({ mode: "production" });
 const compiler = webpack(webpackConfig);
 compiler.run((err, stats) => {
-  if (err) {
-    console.error(err.stack || err);
-    if (err.details) {
-      console.error(err.details);
-    }
-    return;
-  }
+  if (err) return console.error(err.details);
   const info = stats.toJson();
   if (stats.hasErrors()) {
-    console.error(info.errors[0]);
+    console.clear();
+    return console.error(info.errors[0]);
   }
-  if (stats.hasWarnings()) {
-    console.warn(info.warnings);
-  }
+  if (stats.hasWarnings()) console.warn(info.warnings);
+  console.log(`compiled succeed in ${info.time}ms`);
 })

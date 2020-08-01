@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pagelist</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+    }
+    #container {
+      display: flex;
+    }
+    #container>div {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div>
+      <h4>page list</h4>
+      <ul id="page-list"></ul>
+    </div>
+    <div>
+      <h4>compiler list</h4>
+      <ul id="compiler-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var list = document.getElementById("page-list")
+      var pageNames = {{pageNameArray}};
+      pageNames.forEach(name => {
+        var item = document.createElement("li");
+        var link = document.createElement("a");
+        link.setAttribute("href", "/" + name);
+        link.innerHTML = name
+        item.appendChild(link);
+        list.appendChild(item)
+      })
+    })();
+    (function () {
+      var compilerList = document.getElementById("compiler-list")
+      var list = {{compilerListArray}};
+      list.forEach(name => {
+        var item = document.createElement("li");
+        item.innerHTML = name
+        compilerList.appendChild(item)
+      })
+    })();
+  </script>
+</body>
+
+</html>

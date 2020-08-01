@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require("path");
 const mime = require("mime");
 
@@ -24,7 +26,7 @@ function readFile(_fs, dir) {
   })
 }
 
-// 获取指定文件系统下的文件内容和和mime
+// 获取指定文件系统下的文件内容和文件的mime
 async function getFileContentAndMIME(_fs, dir) {
   const data = await readFile(_fs, dir);
   return {

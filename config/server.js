@@ -13,7 +13,8 @@ const {
   getFileContentAndMIME,
 } = require("./utils");
 
-const wsClientJS = fs.readFileSync(path.resolve(paths.rootDir, "config/wsClient.js"))
+const wsClientJS = fs.readFileSync(path.resolve(paths.rootDir, "config/wsClient.js"));
+const pageListTemplate = fs.readFileSync(paths.getHtmlTemplatePath("page-list"));
 
 function createRes(res) {
   return {
@@ -32,10 +33,23 @@ function createRes(res) {
   }
 }
 
-module.exports = function (port, host, publicDir, mfs) {
+function renderPageList(pagesCompilerWatching){
+  const pageListValStr = JSON.stringify(getFoldersOfPathSync(fs, paths.pagesRoot));
+  const compilerListValStr = JSON.stringify(Array.from(pagesCompilerWatching.keys()));
+  const res = String(pageListTemplate).replace("{{pageNameArray}}", pageListValStr)
+    .replace("{{compilerListArray}}", compilerListValStr)
+  return res
+}
+
+module.exports = function (port, host, publicDir, mfs, pagesCompilerWatching) {
   const server = http.createServer(async (req, res) => {
     const response = createRes(res);
+    // 这个服务只会返回文件资源，统一默认http请求是GET请求
     try {
+      // 如果是根路由就返回一个页面展示，当前已经创建的页面列表
+      if(req.url === "/")
+        return response.resContent(renderPageList(pagesCompilerWatching), "text/html");
+      
       // 返回前端链接websocket的脚本
       if (req.url === `/wsClient.js`)
         return response.resContent(wsClientJS, "text/javascript");
@@ -44,7 +58,9 @@ module.exports = function (port, host, publicDir, mfs) {
       const pageName = url.parse(req.url).path.split("/")[1];
       const isPage = getFoldersOfPathSync(fs, paths.pagesRoot).includes(pageName);
       if (isPage) {
-        let resHtml;
+        // 如果是页面路由就要返回编译好的html
+        // 如果html不存在说明就还未编译过，就返回一个等待编译的页面
+        let resHtml;// 将要返回给前端的html内容
         const pageHtmlPath = paths.getDevPageHtmlOutputPath(pageName);
         const exist = await isPathExist(mfs, pageHtmlPath);
         if(exist){
@@ -57,6 +73,8 @@ module.exports = function (port, host, publicDir, mfs) {
         return response.resContent(resHtml, "text/html");
       }
 
+      // 如果不是页面路由，就向下匹配
+      
       // 匹配内存文件系统内打包的文件
       const isAMFSFile = await isFile(mfs, path.join(paths.devOutputPath, req.url));
       if (isAMFSFile) {
@@ -77,6 +95,8 @@ module.exports = function (port, host, publicDir, mfs) {
       console.log(error);
       return response.resError();
     }
-  }).listen(port, host);
+  }).listen(port, host, () => {
+    console.log(`Server is running.\n \nOpen in your browser: http://localhost:${port}`);
+  });
   return server;
 }

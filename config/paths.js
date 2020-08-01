@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require("path");
 
 const rootDir = process.cwd();
@@ -22,5 +24,5 @@ module.exports = {
   getHtmlTemplatePath: (templateName) => path.resolve(htmlTemplatePath, `${templateName}.html`),
   // dev
   devOutputPath,
-  getDevPageHtmlOutputPath:(pageName)=> path.resolve(devOutputPath, pageName, "index.html"),
+  getDevPageHtmlOutputPath: (pageName) => path.resolve(devOutputPath, pageName, "index.html"),
 }
