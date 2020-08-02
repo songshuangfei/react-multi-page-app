@@ -19,7 +19,7 @@ module.exports = {
   outputPath,
   htmlTemplatePath,
   getPageHtmlOutputPath: (pageName) => path.resolve(outputPath, pageName, "index.html"),
-  getPageEntryPath: (pageName) => path.resolve(pagesRoot, pageName, "index.js"),
+  getPageEntryPath: (pageName) => path.resolve(pagesRoot, pageName, "index.tsx"),
   getPageConfigJsonPath: (pageName) => path.resolve(pagesRoot, pageName, "pageInfo.json"),
   getHtmlTemplatePath: (templateName) => path.resolve(htmlTemplatePath, `${templateName}.html`),
   // dev

@@ -30,7 +30,7 @@ function readFile(_fs, dir) {
 async function getFileContentAndMIME(_fs, dir) {
   const data = await readFile(_fs, dir);
   return {
-    content: data.toString(), 
+    content: data, 
     type: mime.getType(dir) 
   }
 }
@@ -50,6 +50,23 @@ function cleanDir(_fs, dir){
   _clean(dir);
 }
 
+
+function copyDir(_fs, source, target){
+  if(!_fs.existsSync(target))
+    _fs.mkdirSync(target);
+  for (const filename of _fs.readdirSync(source)) {
+    const currentPath = path.resolve(source, filename);
+    const targetPath = path.resolve(target, filename);
+    if (_fs.statSync(currentPath).isDirectory()){
+      copyDir(_fs, currentPath, targetPath);
+    }
+    else{
+      const data = _fs.readFileSync(currentPath);
+      _fs.writeFileSync(targetPath, data)
+    }
+  }
+}
+
 module.exports = {
   readJsonSync,
   getFoldersOfPathSync,
@@ -59,5 +76,6 @@ module.exports = {
   readFile,
   getFileContentAndMIME,
   cleanDir,
+  copyDir,
 }
 

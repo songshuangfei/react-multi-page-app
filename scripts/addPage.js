@@ -11,15 +11,29 @@ if(fs.existsSync(pagePath)){
 }
 
 fs.mkdirSync(pagePath);
-fs.writeFileSync(path.resolve(pagePath, "index.js"), `
-document.getElementById("root").innerHTML = "${pageName}"
-`)
+fs.writeFileSync(path.resolve(pagePath, "index.tsx"), `import React from "react";
+import  ReactDom from "react-dom";
+
+function App(){
+  return(
+    <div>
+    ${pageName}
+    </div>
+  )
+}
+
+ReactDom.render(
+  <App/>,
+  document.getElementById("root")
+)
+`);
+
 
 fs.writeFileSync(path.resolve(pagePath, "pageInfo.json"), `{
   "title": "${pageName}",
   "description": "",
   "keywords": []
-}
-`)
+}`
+);
 
 console.log(`create page succeed`)

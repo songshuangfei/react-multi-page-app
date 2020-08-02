@@ -63,8 +63,25 @@ module.exports = function ({ mode, pageName }) {
       // 开发中的js输出不会有hash，所以要按文件夹名区分
       publicPath: isDev ? `/js/${pageName}/` : "/js/"
     },
+    resolve: {
+      mainFiles: ["index"],
+      extensions: [".ts", ".tsx", ".js", "json"],
+      modules: ["node_modules", paths.appSrc]
+    },
     module: {
       rules: [
+        {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          loader: "babel-loader",
+          options: {
+            presets:[
+              "@babel/preset-env",
+              "@babel/preset-react",
+              "@babel/preset-typescript",
+            ]
+          }
+        },
         {
           test: /\.css$/,
           use: ['style-loader', 'css-loader']

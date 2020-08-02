@@ -5,10 +5,11 @@ process.env.NODE_ENV = "production";
 const fs = require("fs");
 const webpack = require("webpack");
 const paths = require("../config/paths")
-const { cleanDir } = require("../config/utils")
+const { cleanDir, copyDir } = require("../config/utils")
 const configFactory = require("../config/webpack.config");
 
 cleanDir(fs, paths.outputPath);
+copyDir(fs, paths.publicRoot, paths.outputPath);
 
 // complier
 const webpackConfig = configFactory({ mode: "production" });
